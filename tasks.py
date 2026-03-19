@@ -7,18 +7,19 @@ class TodoTask():
     content: str
     completion: bool = False
     visible: bool = True
+    collection: int
 
-    def addTask(self, name:str, content:str):
+    def addTask(self, name:str, content:str, collection:int):
         try:
-            if (not name or not content):
+            if (not name) or (not content) or (not collection):
                 raise EmptyValueError
-            if (name is not str) or (content is not str):
+            if not isinstance(name, str) or not isinstance(content, str) or not isinstance(collection, int):
                 raise TypeError
-            return TodoTask(name, content), 0
+            return TodoTask(name, content, collection=collection)
         except EmptyValueError:
             return TodoTask("None", "None")
         except TypeError:
-            return TodoTask(str(name), str(content))
+            return TodoTask(str(name), str(content),collection=int(collection))
     
     @property
     def content(self) -> str:
@@ -67,7 +68,8 @@ class TodoTask():
         if visible is not bool:
             raise TypeError
         
-    
+
+
 
 
 

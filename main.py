@@ -1,5 +1,8 @@
+from dataIO import init_local_data, add_collection
+
 def main():
-    print("Hello from notesapp!")
+    init_local_data("test", "password123")
+    add_collection("test","col1")
 
 
 if __name__ == "__main__":
