@@ -4,22 +4,23 @@ from errors import EmptyValueError
 @dataclass 
 class TodoTask():
     taskName: str
+    user:str
     content: str
     completion: bool = False
     visible: bool = True
     collection: int
 
-    def addTask(self, name:str, content:str, collection:int):
+    def addTask(cls, name:str, content:str, collection:int, user:str):
         try:
-            if (not name) or (not content) or (not collection):
+            if (not name) or (not content) or (not collection) or not(user):
                 raise EmptyValueError
-            if not isinstance(name, str) or not isinstance(content, str) or not isinstance(collection, int):
+            if not isinstance(name, str) or not isinstance(content, str) or not isinstance(collection, int) or not isinstance(user, str):
                 raise TypeError
-            return TodoTask(name, content, collection=collection)
+            return TodoTask( name, user,content, collection=collection)
         except EmptyValueError:
             return TodoTask("None", "None")
         except TypeError:
-            return TodoTask(str(name), str(content),collection=int(collection))
+            return TodoTask(str(name), str(user),str(content),collection=int(collection))
     
     @property
     def content(self) -> str:
@@ -36,9 +37,11 @@ class TodoTask():
         """Get data as dictionary."""
         return {
             "title": self.title,
+            "user": self.user,
             "content": self.content,
             "completion": self.completion,
-            "visibility": self.visibility
+            "visibility": self.visible,
+            "collection": self.collection
         }
     
     def changeContent(self, content:str) -> None:
@@ -67,6 +70,10 @@ class TodoTask():
             raise EmptyValueError
         if visible is not bool:
             raise TypeError
+    
+    @property
+    def user(self):
+        return self.user
         
 
 

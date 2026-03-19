@@ -2,6 +2,7 @@ import json
 import bcrypt
 from errors import EmptyValueError
 from task_collections import Collection
+from tasks import TodoTask
 
 def init_local_data(user:str, password:str):
     """
@@ -27,14 +28,31 @@ def add_collection(user:str, name:str):
     
     Id of created collection is assigned automaticly is is equal to id of the last collection in file +1
     """
+    if (not user) or (not name):
+        raise EmptyValueError
+    if (not isinstance(user,str)) or (not isinstance(name, str)):
+        raise TypeError
     with open(f'usrAppData_{user}.json', "r") as file_handler:
         data = json.load(file_handler)
     
     data["collections"].append(Collection(data["number_of_collections"]+1, name, user).data)
+    data["number_of_collections"]+=1
 
     with open(f'usrAppData_{user}.json',"w") as file_handler:
         json.dump(data, file_handler, indent=2)
 
+def add_task(name:str, user:str, content:str, collection:int):
+    if (not name) or (not user) or (not content) or (not collection):
+        raise EmptyValueError
+    if (not isinstance(name,str)) or (not isinstance(user, str)) or (not isinstance(content,str)) or (not isinstance(collection,int)):
+        raise TypeError
+    with open(f'usrAppData_{user}.json', "r") as file_handler:
+        data = json.load(file_handler)
+    
+    data["tasks"].append(TodoTask(name, user,content,collection=collection).data)
+
+    with open(f'usrAppData_{user}.json',"w") as file_handler:
+        json.dump(data, file_handler, indent=2)
 
 
     
