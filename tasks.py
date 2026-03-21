@@ -2,30 +2,27 @@ from dataclasses import dataclass
 from errors import EmptyValueError
 
 @dataclass 
-class TodoTask():
+class TodoTask:
     taskName: str
     user:str
     content: str
+    collection: int
     completion: bool = False
     visible: bool = True
-    collection: int
 
-    def addTask(cls, name:str, content:str, collection:int, user:str):
+    @classmethod
+    def addTask(cls, name:str, user:str, content:str, collection:int):
         try:
             if (not name) or (not content) or (not collection) or not(user):
                 raise EmptyValueError
             if not isinstance(name, str) or not isinstance(content, str) or not isinstance(collection, int) or not isinstance(user, str):
                 raise TypeError
-            return TodoTask( name, user,content, collection=collection)
+            return cls(name, user,content, collection)
         except EmptyValueError:
-            return TodoTask("None", "None")
+            return cls("None", "None", "None", 0)
         except TypeError:
-            return TodoTask(str(name), str(user),str(content),collection=int(collection))
+            return cls(str(name), str(user),str(content),int(collection))
     
-    @property
-    def content(self) -> str:
-        """Get task's content."""
-        return self.content
 
     @property
     def title(self):
@@ -36,19 +33,20 @@ class TodoTask():
     def data(self) -> dict:
         """Get data as dictionary."""
         return {
-            "title": self.title,
+            "title": self.taskName,
             "user": self.user,
             "content": self.content,
+            "collection": self.collection,
             "completion": self.completion,
-            "visibility": self.visible,
-            "collection": self.collection
+            "visibility": self.visible
+            
         }
     
     def changeContent(self, content:str) -> None:
         """Change task's content"""
         if not content:
             raise EmptyValueError
-        if content is not str:
+        if not isinstance(content, str):
             raise TypeError
         self.content = content
     
@@ -56,24 +54,22 @@ class TodoTask():
         """Change task's title."""
         if not title:
             raise EmptyValueError
-        if title is not str:
+        if not isinstance(title, str):
             raise TypeError
-        self.title = title
+        self.taskName = title
     
     def completeTask(self):
         """Set set completion of the task as True."""
         self.completion = True
 
-    def visibility(self, visible:bool) -> None:
+    def setVisibility(self, visible:bool) -> None:
         """Set task's visibility."""
         if not visible:
             raise EmptyValueError
-        if visible is not bool:
+        if not isinstance(visible,bool):
             raise TypeError
+        self.visible = visible
     
-    @property
-    def user(self):
-        return self.user
         
 
 

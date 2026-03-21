@@ -49,11 +49,16 @@ def add_task(name:str, user:str, content:str, collection:int):
     with open(f'usrAppData_{user}.json', "r") as file_handler:
         data = json.load(file_handler)
     
-    data["tasks"].append(TodoTask(name, user,content,collection=collection).data)
+        data["tasks"].append(TodoTask.addTask(name, user,content,collection).data)
 
     with open(f'usrAppData_{user}.json',"w") as file_handler:
         json.dump(data, file_handler, indent=2)
 
 
-    
+def deleteTask(name:str, user:str):
+    with open(f'usrAppData_{user}.json', "r") as file_handler:
+        data = json.load(file_handler)
+        data["tasks"] = [d for d in data["tasks"] if d["title"] != name]
 
+    with open(f'usrAppData_'):
+        pass
